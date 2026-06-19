@@ -53,6 +53,11 @@ def run_agent():
         }
 
         history.append(result)
+
+        if category == "Spam":
+            print(f"[SKIPPED — Spam]  {email['subject']}")
+            continue
+
         new_results.append(result)
 
         print(f"[{priority}] [{category}]  {email['subject']}")
