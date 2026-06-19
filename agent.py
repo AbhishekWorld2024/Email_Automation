@@ -65,11 +65,10 @@ def run_agent():
         print(f"Summary : {summary}")
         print("-" * 60)
 
-        # Telegram — silent if blocked (e.g. PythonAnywhere free tier)
         try:
             notify_email(result)
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Telegram warning: {e}")
 
     save_history(history)
     skipped = len(emails) - len(new_results)
@@ -81,8 +80,8 @@ def run_agent():
 
     try:
         notify_digest(len(new_results), skipped)
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"Telegram warning: {e}")
 
 
 if __name__ == "__main__":
