@@ -1,0 +1,43 @@
+name: Email Agent — Daily 9 AM
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # 9 AM CST (UTC-5) = 14:00 UTC
+  workflow_dispatch:         # allows manual trigger from GitHub UI
+
+jobs:
+  run-agent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic google-auth google-auth-oauthlib google-api-python-client python-dotenv requests
+
+      - name: Write secrets to files
+        run: |
+          echo "${{ secrets.GMAIL_TOKEN }}" | base64 -d > token.json
+          echo "${{ secrets.GMAIL_CREDENTIALS }}" | base64 -d > credentials.json
+          mkdir -p memory
+          echo "${{ secrets.HISTORY_JSON || '[]' }}" > memory/history.json
+
+      - name: Write .env
+        run: |
+          echo "ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}" >> .env
+          echo "TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}" >> .env
+          echo "TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}" >> .env
+
+      - name: Run email agent
+        run: python agent.py
+
+      - name: Save history back to GitHub secrets instruction
+        run: |
+          echo "=== history.json after run ==="
+          cat memory/history.json
