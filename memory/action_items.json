@@ -1,0 +1,26 @@
+[
+  {
+    "task": "Check Google Account activity to verify if you authorized n8n access",
+    "deadline": null,
+    "priority": "high",
+    "from_email": "Google <no-reply@accounts.google.com>",
+    "email_subject": "Security alert",
+    "added_on": "2026-06-19"
+  },
+  {
+    "task": "Secure Google Account if unauthorized access is suspected",
+    "deadline": null,
+    "priority": "high",
+    "from_email": "Google <no-reply@accounts.google.com>",
+    "email_subject": "Security alert",
+    "added_on": "2026-06-19"
+  },
+  {
+    "task": "Review and manage n8n access permissions in Google Account connections settings",
+    "deadline": null,
+    "priority": "medium",
+    "from_email": "Google <no-reply@accounts.google.com>",
+    "email_subject": "Security alert",
+    "added_on": "2026-06-19"
+  }
+]
