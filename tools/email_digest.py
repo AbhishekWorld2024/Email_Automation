@@ -2,7 +2,8 @@ import base64
 from email.mime.text import MIMEText
 from tools.gmail_tool import get_gmail_service
 
-TO_EMAIL = "abhishek.arugonda223@gmail.com"
+FROM_EMAIL = "abhishek.arugonda223@gmail.com"
+TO_EMAILS = ["abhishek.arugonda223@gmail.com", "abhishek.arugonda345@gmail.com"]
 
 PRIORITY_COLOR = {"High": "#dc2626", "Medium": "#d97706", "Low": "#16a34a"}
 
@@ -45,9 +46,11 @@ def send_email_digest(results: list) -> None:
         return
     service = get_gmail_service()
     html = _build_html(results)
-    msg = MIMEText(html, "html")
-    msg["to"] = TO_EMAIL
-    msg["from"] = TO_EMAIL
-    msg["subject"] = f"📧 Email Digest — {len(results)} new email(s)"
-    raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
-    service.users().messages().send(userId="me", body={"raw": raw}).execute()
+    for to in TO_EMAILS:
+        msg = MIMEText(html, "html")
+        msg["to"] = to
+        msg["from"] = FROM_EMAIL
+        msg["subject"] = f"📧 Email Digest — {len(results)} new email(s)"
+        raw = base64.urlsafe_b64encode(msg.as_bytes()).decode()
+        service.users().messages().send(userId="me", body={"raw": raw}).execute()
+        print(f"Digest sent to {to}")
